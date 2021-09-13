@@ -1,0 +1,14 @@
+# Schema for the configuration files of the UTexas Pantheon Logs HTTP module.
+
+utexas_pantheon_logs_http.settings:
+  type: config_object
+  label: 'UTexas Pantheon Logs HTTP settings'
+  mapping:
+    enabled:
+      type: boolean
+    url:
+      type: string
+    environment_uuid:
+      type: string
+    severity_level:
+      type: integer

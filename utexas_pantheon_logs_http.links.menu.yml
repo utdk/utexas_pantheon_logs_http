@@ -1,0 +1,5 @@
+utexas_pantheon_logs_http.admin_settings:
+  title: 'UTexas Pantheon Logs HTTP'
+  description: 'Administer Logs Client settings.'
+  route_name: utexas_pantheon_logs_http.admin_settings
+  parent: 'system.admin_config_services'

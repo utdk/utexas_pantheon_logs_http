@@ -1,0 +1,8 @@
+utexas_pantheon_logs_http.admin_settings:
+  path: '/admin/config/services/logs-http-client'
+  defaults:
+    _form: '\Drupal\utexas_pantheon_logs_http\Form\SettingsForm'
+    _title: 'UTexas Pantheon Logs HTTP Client'
+    _description: 'Administer UTexas Pantheon Logs Client settings.'
+  requirements:
+    _permission: 'administer utexas pantheon logs http client'

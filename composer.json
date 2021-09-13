@@ -1,0 +1,19 @@
+{
+    "name": "utexas/utexas_pantheon_logs_http",
+    "type": "drupal-custom-module",
+    "description": "Client for the UTexas Pantheon Logs HTTP API.",
+    "keywords": ["Drupal"],
+    "license": ["GPL-2.0-or-later"],
+    "homepage": "https://github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http/issues",
+        "source": "https://github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http"
+    },
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

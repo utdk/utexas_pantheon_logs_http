@@ -1,0 +1,10 @@
+services:
+  utexas_pantheon_logs_http.utexas_pantheon_logs_http_subscriber:
+    class: Drupal\utexas_pantheon_logs_http\EventSubscriber\UtexasPantheonLogsHttpEventSubscriber
+    tags:
+      - { name: event_subscriber }
+  utexas_pantheon_logs_http.utexas_pantheon_logs_http_logger:
+    class: Drupal\utexas_pantheon_logs_http\Logger\UtexasPantheonLogsHttpLogger
+    arguments: ['@config.factory', '@logger.log_message_parser']
+    tags:
+      - { name: logger }

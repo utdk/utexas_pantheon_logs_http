@@ -212,6 +212,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
     return [
       'Content-Type' => 'application/json',
       'Authorization' => 'Splunk ' . $this->config->get('splunk_hec_token'),
+      'Origin' => $this->getUrl(),
     ];
   }
 

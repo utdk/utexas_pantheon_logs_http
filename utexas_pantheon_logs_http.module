@@ -24,10 +24,13 @@ function utexas_pantheon_logs_http_shutdown() {
   }
 
   $url = $logs_http_logger->getUrl();
+  $host = parse_url($url, PHP_URL_HOST);
   $url = [
-    sprintf("%s:443:127.0.0.1:%d",
-    $url,
-    $logs_http_logger->getPantheonStunnel()),
+    sprintf(
+      "%s:443:127.0.0.1:%d",
+      $host,
+      constant($logs_http_logger->getPantheonStunnel())
+    ),
   ];
   \Drupal::logger('utexas_pantheon_logs_http')->notice(implode(',', $url));
   // \Drupal::logger('utexas_pantheon_logs_http')->notice($logs_http_logger->getPantheonStunnel());

@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class UtexasPantheonLogsHttpEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * Initializes Logs http module requirements.
+   * Initializes UTexas Pantheon Logs http module requirements.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   The event to process.

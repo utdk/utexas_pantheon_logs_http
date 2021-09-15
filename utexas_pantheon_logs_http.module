@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Logs HTTP module.
+ * UTexas Pantheon Logs HTTP module.
  */
 
 use GuzzleHttp\Exception\RequestException;
@@ -10,11 +10,11 @@ use GuzzleHttp\Exception\RequestException;
 /**
  * Runs on shutdown to clean up and display developer information.
  *
- * @see \Drupal\logs_http\EventSubscriber\LogsHttpEventSubscriber
+ * @see \Drupal\utexas_pantheon_logs_http\EventSubscriber\LogsHttpEventSubscriber
  */
-function logs_http_shutdown() {
-  /** @var \Drupal\logs_http\Logger\LogsHttpLogger $logs_http_logger */
-  $logs_http_logger = \Drupal::service('logs_http.logs_http_logger');
+function utexas_pantheon_logs_http_shutdown() {
+  /** @var \Drupal\utexas_pantheon_logs_http\Logger\UtexasPantheonLogsHttpLogger $logs_http_logger */
+  $logs_http_logger = \Drupal::service('utexas_pantheon_logs_http.utexas_pantheon_logs_http_logger');
   if (!$logs_http_logger->isEnabled()) {
     return;
   }
@@ -24,7 +24,13 @@ function logs_http_shutdown() {
   }
 
   $url = $logs_http_logger->getUrl();
-
+  $url = [
+    sprintf("%s:443:127.0.0.1:%d",
+    $url,
+    $logs_http_logger->getPantheonStunnel()),
+  ];
+  \Drupal::logger('utexas_pantheon_logs_http')->notice(implode(',', $url));
+  // \Drupal::logger('utexas_pantheon_logs_http')->notice($logs_http_logger->getPantheonStunnel());
   // Send events to logs.
   foreach ($events as $event) {
     $client = \Drupal::httpClient();

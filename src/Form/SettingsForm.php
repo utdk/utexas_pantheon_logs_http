@@ -33,6 +33,8 @@ class SettingsForm extends ConfigFormBase {
     return [
       'enabled',
       'url',
+      'constant_name',
+      'splunk_hec_token',
       'severity_level',
       'uuid',
     ];
@@ -42,7 +44,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
-    $config = $this->config('logs_http.settings');
+    $config = $this->config('utexas_pantheon_logs_http.settings');
 
     $form['enabled'] = [
       '#type' => 'checkbox',
@@ -56,6 +58,20 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Endpoint'),
       '#description' => $this->t('The URL to POST the data to.'),
       '#default_value' => $config->get('url'),
+    ];
+
+    $form['constant_name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Secure integration constant name'),
+      '#description' => $this->t('The PHP constant for the Pantheon stunnel.'),
+      '#default_value' => $config->get('constant_name'),
+    ];
+
+    $form['splunk_hec_token'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Splunk HTTP Event Collector Token'),
+      '#description' => $this->t('The secure token for connecting to the Splunk HEC.'),
+      '#default_value' => $config->get('splunk_hec_token'),
     ];
 
     $form['severity_level'] = [

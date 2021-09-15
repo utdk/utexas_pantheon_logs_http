@@ -1,5 +1,7 @@
 enabled: true
-url: null
+url: 'https://splunk-ifw.austin.utexas.edu/services/collector/event'
 environment_uuid: null
 # Severity level "3" refers to "RfcLogLevel::ERROR".
-severity_level: 3
+severity_level: 6
+constant_name: 'PANTHEON_SOIP_UTEXAS_SPLUNK_HEC'
+splunk_hec_token: null

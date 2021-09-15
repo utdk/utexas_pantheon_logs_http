@@ -12,3 +12,7 @@ utexas_pantheon_logs_http.settings:
       type: string
     severity_level:
       type: integer
+    constant_name:
+      type: string
+    splunk_hec_token:
+      type: string

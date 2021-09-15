@@ -211,7 +211,18 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   public function getHttpHeaders() {
     return [
       'Content-Type' => 'application/json',
+      'Authorization' => 'Splunk ' . $this->config->get('splunk_hec_token'),
     ];
+  }
+
+  /**
+   * A getter for the secure integration constant name.
+   *
+   * @return string|null
+   *   Returns the Pantheon stunnel constant name.
+   */
+  public function getPantheonStunnel() {
+    return $this->config->get('constant_name');
   }
 
 }

@@ -96,17 +96,18 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
     // Populate the message placeholders and then replace them in the message.
     $message_placeholders = $this->logMessageParser->parseMessagePlaceholders($message, $context);
     $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
-
     $event = [
-      'timestamp' => $context['timestamp'],
-      'type' => $this->severityLevels[$level]->getUntranslatedString(),
-      'ip' => $context['ip'],
-      'request_uri' => $context['request_uri'],
-      'referer' => $context['referer'],
-      'uid' => $context['uid'],
-      'link' => strip_tags($context['link']),
-      'message' => $message,
-      'severity' => $level,
+      'event' => [
+        'timestamp' => $context['timestamp'],
+        'type' => $context['channel'],
+        'ip' => $context['ip'],
+        'request_uri' => $context['request_uri'],
+        'referer' => $context['referer'],
+        'uid' => $context['uid'],
+        'link' => strip_tags($context['link']),
+        'message' => $message,
+        'severity' => $this->severityLevels[$level]->getUntranslatedString(),
+      ],
     ];
 
     if (!empty($context['@backtrace_string'])) {
@@ -211,8 +212,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   public function getHttpHeaders() {
     return [
       'Content-Type' => 'application/json',
-      'Authorization' => 'Splunk ' . $this->config->get('splunk_hec_token'),
-      'Origin' => $this->getUrl(),
+      'Authorization' => 'Splunk ' . $this->getSplunkToken(),
     ];
   }
 
@@ -224,6 +224,16 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
    */
   public function getPantheonStunnel() {
     return $this->config->get('constant_name');
+  }
+
+  /**
+   * A getter for the Splunk token.
+   *
+   * @return string|null
+   *   Returns the Splunk token.
+   */
+  private function getSplunkToken() {
+    return $this->config->get('splunk_hec_token');
   }
 
 }

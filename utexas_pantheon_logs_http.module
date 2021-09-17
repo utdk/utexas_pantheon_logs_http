@@ -6,6 +6,8 @@
  */
 
 use GuzzleHttp\Exception\RequestException;
+use Drupal\Core\Utility\UpdateException;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Runs on shutdown to clean up and display developer information.
@@ -25,15 +27,13 @@ function utexas_pantheon_logs_http_shutdown() {
 
   $url = $logs_http_logger->getUrl();
   $host = parse_url($url, PHP_URL_HOST);
-  $url = [
+  $connect_to = [
     sprintf(
       "%s:443:127.0.0.1:%d",
       $host,
       constant($logs_http_logger->getPantheonStunnel())
     ),
   ];
-  \Drupal::logger('utexas_pantheon_logs_http')->notice(implode(',', $url));
-  // \Drupal::logger('utexas_pantheon_logs_http')->notice($logs_http_logger->getPantheonStunnel());
   // Send events to logs.
   foreach ($events as $event) {
     $client = \Drupal::httpClient();
@@ -43,10 +43,22 @@ function utexas_pantheon_logs_http_shutdown() {
       $client->post($url, [
         'json' => $event,
         'headers' => $logs_http_logger->getHttpHeaders(),
+        'debug' => TRUE,
+        'curl' => [
+          CURLOPT_STDERR => fopen('php://stderr', 'w'),
+          CURLOPT_CONNECT_TO => $connect_to,
+          CURLOPT_URL => $url,
+          CURLOPT_RETURNTRANSFER => TRUE,
+          CURLOPT_SSL_VERIFYHOST => 2,
+          CURLOPT_SSL_VERIFYPEER => TRUE,
+          CURLOPT_CONNECTTIMEOUT => 5,
+          CURLOPT_TIMEOUT => 30,
+        ],
       ]);
     }
     catch (RequestException $e) {
-
+      watchdog_exception('utexas_pantheon_logs_http', $e);
+      throw new UpdateException('Could not log action into Splunk.');
     }
   }
 }

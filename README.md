@@ -12,8 +12,9 @@ The configuration that is provided, consists of variables which make the connect
 
 - **Endpoint**: The Splunk URL which is "pinged" with the event Post request
 - **Secure integration constant name**: A Pantheon specific constant which holds a port that is required to build the URL (along with the endpoint) to connect into Splunk
-- **Splunk HTTP Event Collector Token**: A token sent as a Headers attribute in the Post request
 - **Watchdog Severity**: The watchdog severity level value, which is set to log anything between *Info* and *Error* (anything but debug messages)
+
+There is one last variable needed, but no provided by default for the field: **Splunk HTTP Event Collector Token**.
 
 ## Pre-requirements
 Make sure that the site in Pantheon has already been given access to the `PANTHEON_SOIP_UTEXAS_SPLUNK_HEC` constant, which ultimately provides the port to use to send the Post request from Pantheon to Splunk.

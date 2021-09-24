@@ -25,7 +25,19 @@ There is one last variable needed, but no provided by default for the field: **S
 * Existing Splunk HTTP Event Collector, configured with allow-list of Pantheon IP addresses provided by the Secure Integration configuration.
 
 ## How to use
-After enabling the module, default config will be set at `admin/config/services/logs-http-client`. The only variable that will need to be set manually is the `Splunk HTTP Event Collector Token`, which can be found in [Stache](https://stache.utexas.edu/) as `Splunk HEC Token PantheonAppLogs`. Once this is set, any subsequent watchdog logging shall send logs into Splunk. To verify that the site is logging data correctly, access this [Splunk link](https://splunk.security.utexas.edu/en-US/app/ut_eis1/search?q=search%20index%3Dservice-webpublishing%20source%3Dhttp%3APantheonAppLogs%20request_uri%3D%22https%3A%2F%2Flogs-http-utexas-its2.pantheonsite.io%2F*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&earliest=0&latest=&sid=1632159770.689754_8220FB8F-01FA-4F7E-929B-F56DE7E31D3B) and replace the `request_uri` parameter with `https://yourpantheonsite.pantheonsite.io/*`. If you get a hit while searching results, the module has beeen configured correctly.
+After enabling the module, default config will be set at `admin/config/services/logs-http-client`.
+
+The `Splunk HTTP Event Collector Token`, will need to be uploaded via SFTP (if not provisioned by Jenkins), which can be found in [Stache](https://stache.utexas.edu/) as `Splunk HEC Token PantheonAppLogs`.
+The new file has to be named `splunk_settings.json`, has to be uploaded into `/files/private/splunk`, and has to have the following format:
+```
+{
+	"splunk_settings":{
+		"splunk_hec_token":"[the-token-value]"
+	}
+}
+```
+
+Once this is set, any subsequent watchdog logging shall send logs into Splunk. To verify that the site is logging data correctly, you can go to `admin/config/services/logs-http-client` and look for a message at the top stating if the `Splunk Auth token` was either found or not found. Or,  access this [Splunk link](https://splunk.security.utexas.edu/en-US/app/ut_eis1/search?q=search%20index%3Dservice-webpublishing%20source%3Dhttp%3APantheonAppLogs%20request_uri%3D%22https%3A%2F%2Flogs-http-utexas-its2.pantheonsite.io%2F*%22&display.page.search.mode=verbose&dispatch.sample_ratio=1&earliest=0&latest=&sid=1632159770.689754_8220FB8F-01FA-4F7E-929B-F56DE7E31D3B) and replace the `request_uri` parameter with `https://yourpantheonsite.pantheonsite.io/*`. If you get a hit while searching results, the module has beeen configured correctly.
 
 ## Debugging
 Using the Logger class to print notices on your watchdog logs is the best way to debug this module's content.

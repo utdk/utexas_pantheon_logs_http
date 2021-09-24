@@ -47,6 +47,18 @@ class SettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
     $config = $this->config('utexas_pantheon_logs_http.settings');
 
+    // Load Splunk token.
+    $splunk_hec_token = '';
+    if ($splunk_settings = file_get_contents(Settings::get('file_private_path') . '/splunk/splunk_settings.json')) {
+      $settings = Json::decode($splunk_settings, TRUE);
+      $splunk_hec_token = $settings['splunk_settings']['splunk_hec_token'];
+    }
+    $status = $splunk_hec_token ? 'Found' : 'Not found';
+    $form['splunk_hec_token'] = [
+      '#type'   => 'markup',
+      '#markup' => $this->t('<h3><strong>Splunk Auth token: </strong> :status</h3>', [':status' => $status]),
+    ];
+
     $form['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable'),
@@ -66,19 +78,6 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Secure integration constant name'),
       '#description' => $this->t('The PHP constant for the Pantheon stunnel.'),
       '#default_value' => $config->get('constant_name'),
-    ];
-    // Load Splunk token.
-    $splunk_hec_token = '';
-    if ($splunk_settings = file_get_contents(Settings::get('file_private_path') . '/splunk/splunk_settings.json')) {
-      $settings = Json::decode($splunk_settings, TRUE);
-      $splunk_hec_token = $settings['splunk_settings']['splunk_hec_token'];
-    }
-    $form['splunk_hec_token'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Splunk HTTP Event Collector Token'),
-      '#description' => $this->t('The secure token for connecting to the Splunk HEC. This cannot be set in config, it has to be uploaded via SFTP.'),
-      '#default_value' => $splunk_hec_token,
-      '#disabled' => TRUE,
     ];
 
     $form['severity_level'] = [

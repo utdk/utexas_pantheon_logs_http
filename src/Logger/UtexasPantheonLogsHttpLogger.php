@@ -201,7 +201,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   /**
    * A getter for the url of the endpoint we should send the data to.
    *
-   * @return array|mixed|null
+   * @return string
    *   Returns the endpoint URL to POST data to.
    */
   public function getUrl() {
@@ -210,6 +210,9 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
 
   /**
    * A getter for the HTTP headers for the logging request.
+   *
+   * @return mixed
+   *   Returns the endpoint URL to POST data to.
    */
   public function getHttpHeaders() {
     if ($this->getSplunkToken() === '') {
@@ -224,7 +227,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   /**
    * A getter for the secure integration constant name.
    *
-   * @return string|null
+   * @return string
    *   Returns the Pantheon stunnel constant name.
    */
   public function getPantheonStunnel() {
@@ -234,7 +237,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   /**
    * A getter for the Splunk token.
    *
-   * @return string|null
+   * @return string
    *   Returns the Splunk token.
    */
   private function getSplunkToken() {

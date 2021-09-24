@@ -20,8 +20,12 @@ function utexas_pantheon_logs_http_shutdown() {
   if (!$logs_http_logger->isEnabled()) {
     return;
   }
-
+  // Return if no new events found.
   if (!$events = $logs_http_logger->getEvents()) {
+    return;
+  }
+  // Return if no splunk token found.
+  if ($logs_http_logger->getHttpHeaders() === '') {
     return;
   }
 

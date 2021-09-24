@@ -6,6 +6,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Logger\RfcLoggerTrait;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements a Logs Http Logger instance.
@@ -210,6 +212,9 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
    * A getter for the HTTP headers for the logging request.
    */
   public function getHttpHeaders() {
+    if ($this->getSplunkToken() === '') {
+      return '';
+    }
     return [
       'Content-Type' => 'application/json',
       'Authorization' => 'Splunk ' . $this->getSplunkToken(),
@@ -233,7 +238,14 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
    *   Returns the Splunk token.
    */
   private function getSplunkToken() {
-    return $this->config->get('splunk_hec_token');
+    // Load Splunk token.
+    if ($splunk_settings = file_get_contents(Settings::get('file_private_path') . '/splunk/splunk_settings.json')) {
+      $settings = Json::decode($splunk_settings, TRUE);
+      if (!empty($settings['splunk_settings']['splunk_hec_token'])) {
+        return $settings['splunk_settings']['splunk_hec_token'];
+      }
+    }
+    return '';
   }
 
 }

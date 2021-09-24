@@ -6,6 +6,8 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Site\Settings;
 
 /**
  * Defines a form that configures Logs http settings.
@@ -34,7 +36,6 @@ class SettingsForm extends ConfigFormBase {
       'enabled',
       'url',
       'constant_name',
-      'splunk_hec_token',
       'severity_level',
       'uuid',
     ];
@@ -66,12 +67,18 @@ class SettingsForm extends ConfigFormBase {
       '#description' => $this->t('The PHP constant for the Pantheon stunnel.'),
       '#default_value' => $config->get('constant_name'),
     ];
-
+    // Load Splunk token.
+    $splunk_hec_token = '';
+    if ($splunk_settings = file_get_contents(Settings::get('file_private_path') . '/splunk/splunk_settings.json')) {
+      $settings = Json::decode($splunk_settings, TRUE);
+      $splunk_hec_token = $settings['splunk_settings']['splunk_hec_token'];
+    }
     $form['splunk_hec_token'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Splunk HTTP Event Collector Token'),
-      '#description' => $this->t('The secure token for connecting to the Splunk HEC.'),
-      '#default_value' => $config->get('splunk_hec_token'),
+      '#description' => $this->t('The secure token for connecting to the Splunk HEC. This cannot be set in config, it has to be uploaded via SFTP.'),
+      '#default_value' => $splunk_hec_token,
+      '#disabled' => TRUE,
     ];
 
     $form['severity_level'] = [

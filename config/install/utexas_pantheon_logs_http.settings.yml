@@ -4,4 +4,3 @@ environment_uuid: null
 # Severity level "3" refers to "RfcLogLevel::ERROR".
 severity_level: 6
 constant_name: 'PANTHEON_SOIP_UTEXAS_SPLUNK_HEC'
-splunk_hec_token: null

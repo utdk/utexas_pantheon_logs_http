@@ -13,13 +13,3 @@
 function utexas_pantheon_logs_http_uninstall() {
   \Drupal::configFactory()->getEditable('utexas_pantheon_logs_http.settings')->delete();
 }
-
-/**
- * Handle uuid config name renaming.
- */
-function utexas_pantheon_logs_http_update_8001() {
-  $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('utexas_pantheon_logs_http.settings');
-  $config->set('environment_uuid', $config->get('uuid'));
-  $config->save(TRUE);
-}

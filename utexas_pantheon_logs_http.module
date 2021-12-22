@@ -20,6 +20,10 @@ function utexas_pantheon_logs_http_shutdown() {
   if (!$logs_http_logger->isEnabled()) {
     return;
   }
+  if (!getenv($logs_http_logger->getPantheonStunnel())) {
+    // This is being executed on a non-Pantheon environment (e.g., locally).
+    return;
+  }
   // Return if no new events found.
   if (!$events = $logs_http_logger->getEvents()) {
     return;
@@ -61,7 +65,6 @@ function utexas_pantheon_logs_http_shutdown() {
       ]);
     }
     catch (RequestException $e) {
-      watchdog_exception('utexas_pantheon_logs_http', $e);
       throw new UpdateException('Could not log action into Splunk.');
     }
   }

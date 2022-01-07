@@ -3,6 +3,6 @@ name: Utexas Pantheon Logs HTTP
 description: UTexas Pantheon Logs HTTP API
 package: UTexas
 core_version_requirement: ^8 || ^9
-version: '1.0.0'
+version: '1.0.1'
 configure: utexas_pantheon_logs_httplogs_http.admin_settings
 

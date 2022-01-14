@@ -7,7 +7,6 @@
 
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Core\Utility\UpdateException;
-use Drupal\Component\Serialization\Json;
 
 /**
  * Runs on shutdown to clean up and display developer information.
@@ -20,7 +19,7 @@ function utexas_pantheon_logs_http_shutdown() {
   if (!$logs_http_logger->isEnabled()) {
     return;
   }
-  if (!getenv($logs_http_logger->getPantheonStunnel())) {
+  if (!defined($logs_http_logger->getPantheonStunnel())) {
     // This is being executed on a non-Pantheon environment (e.g., locally).
     return;
   }

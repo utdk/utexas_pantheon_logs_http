@@ -112,12 +112,8 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
       ],
     ];
 
-    if (!empty($context['@backtrace_string'])) {
-      $event['exception_trace'] = $context['@backtrace_string'];
-    }
-
     if ($environment_uuid = $this->config->get('environment_uuid')) {
-      $event['uuid'] = $environment_uuid;
+      $event['event']['uuid'] = $environment_uuid;
     }
 
     return $event;

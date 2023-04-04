@@ -11,7 +11,8 @@
         "source": "https://github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http"
     },
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "drupal/core": "^9"
     },
     "config": {
         "sort-packages": true

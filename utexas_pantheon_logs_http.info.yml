@@ -2,7 +2,7 @@ type: module
 name: Utexas Pantheon Logs HTTP
 description: UTexas Pantheon Logs HTTP API
 package: UTexas
-core_version_requirement: ^8 || ^9
-version: '1.2.0'
-configure: utexas_pantheon_logs_httplogs_http.admin_settings
+core_version_requirement: ^8 || ^9 || ^10
+version: '2.0.0'
+configure: utexas_pantheon_logs_http.admin_settings
 

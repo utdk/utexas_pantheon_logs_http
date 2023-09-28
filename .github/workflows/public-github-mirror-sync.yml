@@ -1,0 +1,37 @@
+name: Sync repository to github.com/utdk/<repo>
+on: [push, delete]
+env:
+  HOST: "github.austin.utexas.edu"
+  OWNER: "eis1-wcs"
+  REPO: ${{ github.event.repository.name }}
+  REF: ${{ github.ref_name }}
+  DELETE_BRANCH: ${{ github.event.ref }}
+  ENT_TOKEN: ${{ secrets.WCMS_ENT_GITHUB_TOKEN }}
+  PUBLIC_TOKEN: ${{ secrets.WCMS_PUBLIC_GITHUB_TOKEN }}
+  TRIGGER: ${{ github.event_name }}
+jobs:
+  build:
+    runs-on: [ wcs-gh-t01 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: SYNC TO GITHUB.COM
+        run: |
+          rm -rf $REPO
+          # Authenticate to gh cli
+          echo $ENT_TOKEN | gh auth login --hostname $HOST --with-token
+          gh auth setup-git --hostname $HOST
+          gh repo clone $OWNER/$REPO
+          cd $REPO
+          git remote add "public" "https://$PUBLIC_TOKEN@github.com/utdk/$REPO.git"
+
+          if [ $TRIGGER == "push" ]; then
+            echo "Syncing $REF..."
+            git fetch && git checkout $REF
+            git push -f public $REF
+            exit 0
+          fi
+          if [ $TRIGGER == "delete" ]; then
+            echo "Syncing deleted branch $DELETE_BRANCH..."
+            git push public -d -f $DELETE_BRANCH
+            exit 0
+          fi

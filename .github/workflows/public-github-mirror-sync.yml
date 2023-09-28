@@ -31,10 +31,7 @@ jobs:
             exit 0
           fi
           if [ $TRIGGER == "delete" ]; then
-            EXISTS=$(git ls-remote public $DELETE_BRANCH)
-            if [ ! -z $EXISTS ]; then
-              echo "Syncing deleted branch $DELETE_BRANCH..."
-              git push public -d -f $DELETE_BRANCH
-            fi
+            echo "Syncing deleted branch $DELETE_BRANCH..."
+            git push public -d -f $DELETE_BRANCH
             exit 0
           fi

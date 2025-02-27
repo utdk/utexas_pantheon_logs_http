@@ -67,7 +67,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = []) {
+  public function log($level, string|\Stringable $message, array $context = []): void {
     if (!$this->isEnabled()) {
       // Service is disabled.
       return;
@@ -137,7 +137,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
 
     // Prevent identical events.
     $event_clone = $event;
-    unset($event_clone['timestamp']);
+    unset($event_clone['event']['timestamp']);
     $key = md5(serialize($event_clone));
 
     $is_unique = !empty($this->cache[$key]);

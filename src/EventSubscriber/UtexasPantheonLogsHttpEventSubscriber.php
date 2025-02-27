@@ -18,7 +18,12 @@ class UtexasPantheonLogsHttpEventSubscriber implements EventSubscriberInterface 
    *   The event to process.
    */
   public function onRequest(RequestEvent $event) {
-    drupal_register_shutdown_function('utexas_pantheon_logs_http_shutdown');
+    // Kernel requests can have sub-requests. To avoid registering this
+    // shutdown function twice, we check if this is the MainRequest.
+    // github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http/issues/29.
+    if ($event->isMainRequest()) {
+      drupal_register_shutdown_function('utexas_pantheon_logs_http_shutdown');
+    }
   }
 
   /**

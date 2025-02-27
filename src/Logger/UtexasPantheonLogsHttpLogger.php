@@ -137,7 +137,7 @@ class UtexasPantheonLogsHttpLogger implements UtexasPantheonLogsHttpLoggerInterf
 
     // Prevent identical events.
     $event_clone = $event;
-    unset($event_clone['timestamp']);
+    unset($event_clone['event']['timestamp']);
     $key = md5(serialize($event_clone));
 
     $is_unique = !empty($this->cache[$key]);

@@ -12,7 +12,24 @@ jobs:
   build:
     runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v3
+      - name: Add SSH key for use with GitHub
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.ID_ED25519_DEVOPS }}
+          name: id_ed25519_devops
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          config: |
+            Host github.com
+            IdentityFile ~/.ssh/id_ed25519_devops
+
+      - uses: actions/checkout@v4
+      - name: Associate Git with EIS1-wcms-devops user
+        run: |
+          gh config set git_protocol ssh
+          git config --global user.email "eis1-wcms-devops@austin.utexas.edu"
+          git config --global user.name "EIS1-wcms-devops"
+
+      - uses: actions/checkout@v4
       - name: SYNC TO PUBLIC MIRROR
         run: |
           rm -rf $REPO

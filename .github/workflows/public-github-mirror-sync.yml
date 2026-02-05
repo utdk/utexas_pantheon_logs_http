@@ -1,29 +1,24 @@
-name: Sync repository to github.com/utdk/<repo>
+name: Sync to public mirror
 on: [push, delete]
 env:
-  HOST: "github.austin.utexas.edu"
-  OWNER: "eis1-wcs"
+  OWNER: "utexas-utdk"
   REPO: ${{ github.event.repository.name }}
   REF: ${{ github.ref_name }}
   DELETE_BRANCH: ${{ github.event.ref }}
-  ENT_TOKEN: ${{ secrets.WCMS_ENT_GITHUB_TOKEN }}
-  PUBLIC_TOKEN: ${{ secrets.WCMS_PUBLIC_GITHUB_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_CLI_PAT_FOR_VMS_USING_GITHUB_ACTIONS }}
+  PUBLIC_TOKEN: ${{ secrets.PAT_FOR_PUBLIC_GITHUB_SYNC }}
   TRIGGER: ${{ github.event_name }}
 jobs:
   build:
-    runs-on: [ wcs-gh-p02-group ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
-      - name: SYNC TO GITHUB.COM
+      - name: SYNC TO PUBLIC MIRROR
         run: |
           rm -rf $REPO
-          # Authenticate to gh cli
-          echo $ENT_TOKEN | gh auth login --hostname $HOST --with-token
-          gh auth setup-git --hostname $HOST
-          gh repo clone $OWNER/$REPO
+          gh repo clone "$OWNER/$REPO"
           cd $REPO
           git remote add "public" "https://$PUBLIC_TOKEN@github.com/utdk/$REPO.git"
-
           if [ $TRIGGER == "push" ]; then
             echo "Syncing $REF..."
             git fetch && git checkout $REF
@@ -35,3 +30,5 @@ jobs:
             git push public -d -f $DELETE_BRANCH
             exit 0
           fi
+          cd ..
+          rm -rf $REPO

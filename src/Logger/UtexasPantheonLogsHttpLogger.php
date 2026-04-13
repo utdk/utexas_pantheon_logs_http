@@ -4,8 +4,8 @@ namespace Drupal\utexas_pantheon_logs_http\Logger;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LogMessageParserInterface;
-use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Logger\RfcLoggerTrait;
+use Drupal\Core\Logger\RfcLogLevel;
 
 /**
  * Implements a Logs Http Logger instance.

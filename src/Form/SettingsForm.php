@@ -6,8 +6,6 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Component\Serialization\Json;
-use Drupal\Core\Site\Settings;
 
 /**
  * Defines a form that configures Logs http settings.
@@ -44,16 +42,17 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?Request $request = NULL) {
     $config = $this->config('utexas_pantheon_logs_http.settings');
 
     // Load Splunk token.
-    $splunk_hec_token = '';
-    if ($splunk_settings = file_get_contents(Settings::get('file_private_path') . '/splunk/splunk_settings.json')) {
-      $settings = Json::decode($splunk_settings, TRUE);
-      $splunk_hec_token = $settings['splunk_settings']['splunk_hec_token'];
+    if (function_exists('pantheon_get_secret')) {
+      $token = pantheon_get_secret('splunk_http_logger_token') ?? NULL;
+      $status = $token ? 'Found' : 'Not found';
     }
-    $status = $splunk_hec_token ? 'Found' : 'Not found';
+    else {
+      $status = 'N/A (non-Pantheon environment)';
+    }
     $form['splunk_hec_token'] = [
       '#type'   => 'markup',
       '#markup' => $this->t('<h3><strong>Splunk Auth token: </strong> :status</h3>', [':status' => $status]),

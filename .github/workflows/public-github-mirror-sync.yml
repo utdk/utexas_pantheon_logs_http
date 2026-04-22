@@ -49,3 +49,17 @@ jobs:
           fi
           cd ..
           rm -rf $REPO
+      - name: Notify on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v9
+        with:
+          server_address: authenticated.relay.mail.utexas.edu
+          server_port: 25
+          secure: false # connect over plain SMTP, then it will upgrade to TLS (ie, STARTTLS)
+          username: ${{ secrets.SMTP_USER_FOR_ACTIONS }}
+          password: ${{secrets.SMTP_PASSWORD_FOR_ACTIONS }}
+          from: '"Pantheon Stewards" <pantheon-stewards@utlists.utexas.edu>' # name + address required; just address throws an error
+          to: 'pantheon-stewards@utlists.utexas.edu'
+          subject: "Failure: ${{ github.workflow }}"
+          html_body: '[Review build output](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+          convert_markdown: true

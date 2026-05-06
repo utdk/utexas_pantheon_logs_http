@@ -1,3 +1,6 @@
+parameters:
+  utexas_pantheon_logs_http.skip_procedural_hook_scan: true
+
 services:
   utexas_pantheon_logs_http.utexas_pantheon_logs_http_subscriber:
     class: Drupal\utexas_pantheon_logs_http\EventSubscriber\UtexasPantheonLogsHttpEventSubscriber

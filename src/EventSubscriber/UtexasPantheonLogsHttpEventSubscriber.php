@@ -2,9 +2,10 @@
 
 namespace Drupal\utexas_pantheon_logs_http\EventSubscriber;
 
+use Drupal\utexas_pantheon_logs_http\Logger\UtexasPantheonLogsHttpLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Event subscribed for Logs http.
@@ -22,7 +23,7 @@ class UtexasPantheonLogsHttpEventSubscriber implements EventSubscriberInterface 
     // shutdown function twice, we check if this is the MainRequest.
     // github.austin.utexas.edu/eis1-wcs/utexas_pantheon_logs_http/issues/29.
     if ($event->isMainRequest()) {
-      drupal_register_shutdown_function('utexas_pantheon_logs_http_shutdown');
+      drupal_register_shutdown_function([UtexasPantheonLogsHttpLogger::class, 'shutdown']);
     }
   }
 
